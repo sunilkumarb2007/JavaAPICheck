@@ -8,7 +8,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 @RestController
+@CrossOrigin(origins = "*") // Allow GitHub Pages and Localtunnel to call this backend
 public class GatewayController {
 
     private final RestTemplate restTemplate;

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaAPICheck Shop - Failure Lab</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #3b82f6;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 { margin-top: 0; font-size: 1.5rem; color: #94a3b8; }
+        .product {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .product-img {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(45deg, #1e293b, #334155);
+            border-radius: 8px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .price { font-size: 1.5rem; font-weight: bold; margin: 1rem 0; }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .btn.danger { background: var(--danger); }
+        .btn.success { background: var(--success); }
+        
+        .lab-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .radio-label:hover { border-color: rgba(255,255,255,0.2); }
+        input[type="radio"] { accent-color: var(--primary); transform: scale(1.2); }
+        
+        #status-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .status-content {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .status-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .error-details {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            font-family: monospace;
+            text-align: left;
+            color: #ef4444;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Shop View -->
+        <div class="card">
+            <h1>🛍️ JavaAPICheck Shop</h1>
+            <div class="product">
+                <div class="product-img">💻</div>
+                <h2>Premium Laptop Pro</h2>
+                <div class="price">₹49,999</div>
+            </div>
+            <button class="btn" onclick="checkout()">BUY NOW</button>
+        </div>
+
+        <!-- Failure Lab Panel -->
+        <div class="card">
+            <h1>🔬 Failure Lab Selector</h1>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Select the backend scenario to trigger when clicking 'BUY NOW'.</p>
+            
+            <div class="lab-options">
+                <label class="radio-label">
+                    <input type="radio" name="scenario" value="5002" checked>
+                    <div>
+                        <strong>Healthy (200 OK)</strong><br>
+                        <small>Standard successful payment flow.</small>
+                    </div>
+                </label>
+                <label class="radio-label" style="border-left: 3px solid #ef4444;">
+                    <input type="radio" name="scenario" value="5001">
+                    <div>
+                        <strong>Null Object Access (500)</strong><br>
+                        <small>The canonical CodeGuardian target.</small>
+                    </div>
+                </label>
+                <label class="radio-label" style="border-left: 3px solid #f59e0b;">
+                    <input type="radio" name="scenario" value="5003">
+                    <div>
+                        <strong>Database Timeout (500)</strong><br>
+                        <small>Simulates a slow Postgres query.</small>
+                    </div>
+                </label>
+                <label class="radio-label" style="border-left: 3px solid #8b5cf6;">
+                    <input type="radio" name="scenario" value="5004">
+                    <div>
+                        <strong>Connection Refused (500)</strong><br>
+                        <small>Simulates external API failure.</small>
+                    </div>
+                </label>
+                <label class="radio-label" style="border-left: 3px solid #ec4899;">
+                    <input type="radio" name="scenario" value="5006">
+                    <div>
+                        <strong>Invalid State (400)</strong><br>
+                        <small>Simulates illegal state transition.</small>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Modal -->
+    <div id="status-modal">
+        <div class="status-content">
+            <div id="status-icon" class="status-icon">⏳</div>
+            <h2 id="status-title">Processing Order...</h2>
+            <p id="status-message">Please wait.</p>
+            <div id="error-box" class="error-details" style="display: none;"></div>
+            <button id="close-btn" class="btn" style="margin-top: 2rem; display: none;" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        async function checkout() {
+            const scenario = document.querySelector('input[name="scenario"]:checked').value;
+            const modal = document.getElementById('status-modal');
+            const icon = document.getElementById('status-icon');
+            const title = document.getElementById('status-title');
+            const msg = document.getElementById('status-message');
+            const errBox = document.getElementById('error-box');
+            const closeBtn = document.getElementById('close-btn');
+
+            // Reset modal
+            icon.textContent = '⏳';
+            title.textContent = 'Processing Order...';
+            msg.textContent = 'Please wait while we secure your payment.';
+            errBox.style.display = 'none';
+            closeBtn.style.display = 'none';
+            modal.style.display = 'flex';
+
+            try {
+                // If you are running the backend via localtunnel, point this to your localtunnel URL
+                const backendUrl = 'https://yellow-symbols-occur.loca.lt/checkout'; 
+                
+                const response = await fetch(backendUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: 101,
+                        orderId: parseInt(scenario),
+                        amount: 49999.0
+                    })
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (response.ok) {
+                    icon.textContent = '✅';
+                    title.textContent = 'Order Successful!';
+                    msg.textContent = 'Your payment was processed securely.';
+                } else {
+                    icon.textContent = '❌';
+                    title.textContent = 'ORDER FAILED';
+                    msg.textContent = 'Unable to complete your order.';
+                    
+                    errBox.style.display = 'block';
+                    errBox.innerHTML = `
+                        <strong>HTTP ${response.status}</strong><br>
+                        Error: ${data.errorCode || 'UNKNOWN_ERROR'}<br>
+                        Message: ${data.message || 'Server error occurred'}<br><br>
+                        Reference: ${data.requestId || 'req-unknown'}
+                    `;
+                }
+            } catch (err) {
+                icon.textContent = '⚠️';
+                title.textContent = 'Network Error';
+                msg.textContent = 'Could not reach the server.';
+            }
+            closeBtn.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('status-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
