@@ -38,13 +38,14 @@ public class PaymentServiceTest {
     }
 
     @Test
-    public void testProcessPayment_UnknownMerchant_ThrowsNPE() {
+    public void testProcessPayment_UnknownMerchant() {
         PaymentRequest request = new PaymentRequest();
         request.setMerchantCode("UNKNOWN_MERCHANT");
         request.setAmount(new BigDecimal("50.00"));
 
-        // This demonstrates the deliberate NullPointerException defect
-        assertThrows(NullPointerException.class, () -> {
+        // The test expects IllegalArgumentException for an unknown merchant.
+        // It currently fails (throws NullPointerException) because the defect is not patched yet.
+        assertThrows(IllegalArgumentException.class, () -> {
             paymentService.processPayment(request);
         });
     }

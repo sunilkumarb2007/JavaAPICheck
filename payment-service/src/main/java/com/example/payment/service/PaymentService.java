@@ -36,8 +36,7 @@ public class PaymentService {
                 // Deliberately leave merchant null
             } else if (oid == 5002) {
                 // SUCCESS
-                merchant = new Merchant("M5002", "Demo Merchant");
-                merchant.setActive(true);
+                merchant = new Merchant("M5002", true);
             } else if (oid == 5003) {
                 // FAILURE-002: DATABASE_TIMEOUT
                 System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=500 error_code=DATABASE_TIMEOUT message=Database query timed out");
@@ -46,7 +45,7 @@ public class PaymentService {
             } else if (oid == 5004) {
                 // FAILURE-003: CONNECTION_REFUSED
                 System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=500 error_code=CONNECTION_REFUSED message=Could not connect to external provider");
-                throw new java.net.ConnectException("Connection refused (Connection refused)");
+                throw new RuntimeException("Connection refused (Connection refused)", new java.net.ConnectException("Connection refused"));
             } else if (oid == 5006) {
                 // FAILURE-004: INVALID_PAYMENT_STATE
                 System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=400 error_code=INVALID_PAYMENT_STATE message=Transition to COMPLETED not allowed from FAILED");
