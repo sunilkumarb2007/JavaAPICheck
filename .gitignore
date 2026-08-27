@@ -1,6 +1,0 @@
-target/
-**/target/
-.DS_Store
-Thumbs.db
-wrapper-seed/
-wrapper-seed.zip
