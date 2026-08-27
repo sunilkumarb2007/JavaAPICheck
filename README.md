@@ -145,9 +145,9 @@ If the client does not provide `X-Request-ID`, the gateway generates one and for
 The intended repair is small and obvious:
 
 ```java
-PaymentRecord paymentRecord = repository.findByOrderId(request.orderId());
-if (paymentRecord == null) {
-    // handle gracefully
+Merchant merchant = merchantRepository.findById(request.getMerchantId());
+if (merchant == null) {
+    throw new IllegalArgumentException("Merchant not found");
 }
 ```
 
