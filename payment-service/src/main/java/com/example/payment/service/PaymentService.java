@@ -6,7 +6,9 @@ import com.example.payment.model.Payment;
 import com.example.payment.repository.MerchantRepository;
 import com.example.payment.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 
