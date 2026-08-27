@@ -1,0 +1,10 @@
+.git
+.gitignore
+target
+**/target
+.idea
+.vscode
+*.class
+*.zip
+*.bak
+README.md

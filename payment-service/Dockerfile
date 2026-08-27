@@ -1,16 +1,17 @@
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
+FROM maven:3.9.9-eclipse-temurin-17 AS build
+WORKDIR /workspace
+
 COPY pom.xml .
-COPY gateway/pom.xml gateway/
-COPY order-service/pom.xml order-service/
-COPY payment-service/pom.xml payment-service/
-RUN mvn dependency:go-offline || true
+COPY gateway/pom.xml gateway/pom.xml
+COPY order-service/pom.xml order-service/pom.xml
+COPY payment-service/pom.xml payment-service/pom.xml
 
-COPY . .
-RUN mvn package -pl payment-service -am -DskipTests
+COPY payment-service/src payment-service/src
 
-FROM eclipse-temurin:17-jre-alpine
+RUN mvn -pl payment-service -am clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/payment-service/target/*.jar app.jar
+COPY --from=build /workspace/payment-service/target/payment-service-*.jar app.jar
 EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "app.jar"]

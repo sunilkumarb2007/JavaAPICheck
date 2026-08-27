@@ -1,8 +1,8 @@
-version: '3.8'
-
 services:
+
   postgres:
     image: postgres:15-alpine
+    container_name: javaapicheck-postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -11,37 +11,53 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d paymentdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  gateway:
+  payment-service:
     build:
       context: .
-      dockerfile: ./gateway/Dockerfile
+      dockerfile: payment-service/Dockerfile
+    container_name: javaapicheck-payment
+    environment:
+      SERVER_PORT: 8082
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/paymentdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
     ports:
-      - "8080:8080"
+      - "8082:8082"
     depends_on:
-      - order-service
+      postgres:
+        condition: service_healthy
 
   order-service:
     build:
       context: .
-      dockerfile: ./order-service/Dockerfile
+      dockerfile: order-service/Dockerfile
+    container_name: javaapicheck-order
+    environment:
+      SERVER_PORT: 8081
+      PAYMENT_SERVICE_URL: http://payment-service:8082
     ports:
       - "8081:8081"
     depends_on:
       - payment-service
 
-  payment-service:
+  gateway:
     build:
       context: .
-      dockerfile: ./payment-service/Dockerfile
-    ports:
-      - "8082:8082"
+      dockerfile: gateway/Dockerfile
+    container_name: javaapicheck-gateway
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/paymentdb
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      SERVER_PORT: 8080
+      ORDER_SERVICE_URL: http://order-service:8081
+    ports:
+      - "8080:8080"
     depends_on:
-      - postgres
+      - order-service
 
 volumes:
   pgdata:

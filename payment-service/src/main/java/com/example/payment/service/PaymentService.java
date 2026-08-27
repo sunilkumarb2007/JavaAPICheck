@@ -8,6 +8,8 @@ import com.example.payment.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 public class PaymentService {
 
@@ -15,55 +17,101 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Autowired
-    public PaymentService(MerchantRepository merchantRepository, PaymentRepository paymentRepository) {
+    public PaymentService(
+            MerchantRepository merchantRepository,
+            PaymentRepository paymentRepository) {
         this.merchantRepository = merchantRepository;
         this.paymentRepository = paymentRepository;
     }
 
     public Payment processPayment(PaymentRequest request) {
-        String requestId = request.getRequestId();
-        if (requestId == null) requestId = "req-unknown";
-        
-        System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=payment_processing request_id=" + requestId + " order_id=" + request.getOrderId() + " status_code=200 message=Attempting to resolve demo payment record");
-        
-        Merchant merchant = null;
-        
-        if (request.getOrderId() != null) {
-            long oid = request.getOrderId();
-            if (oid == 5001) {
-                // FAILURE-001: NULL_OBJECT_ACCESS
-                System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=500 error_code=NULL_OBJECT_ACCESS message=Payment request object was null before validation");
-                // Deliberately leave merchant null
-            } else if (oid == 5002) {
-                // SUCCESS
-                merchant = new Merchant("M5002", true);
-            } else if (oid == 5003) {
-                // FAILURE-002: DATABASE_TIMEOUT
-                System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=500 error_code=DATABASE_TIMEOUT message=Database query timed out");
-                try { Thread.sleep(5000); } catch (Exception e) {}
-                throw new RuntimeException("Query execution timeout");
-            } else if (oid == 5004) {
-                // FAILURE-003: CONNECTION_REFUSED
-                System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=500 error_code=CONNECTION_REFUSED message=Could not connect to external provider");
-                throw new RuntimeException("Connection refused (Connection refused)", new java.net.ConnectException("Connection refused"));
-            } else if (oid == 5006) {
-                // FAILURE-004: INVALID_PAYMENT_STATE
-                System.out.println("timestamp=" + java.time.Instant.now() + " service=payment-service event_type=error request_id=" + requestId + " status_code=400 error_code=INVALID_PAYMENT_STATE message=Transition to COMPLETED not allowed from FAILED");
-                throw new IllegalStateException("Invalid state transition");
-            } else {
-                merchant = merchantRepository.findByMerchantCode(request.getMerchantCode());
+        String requestId = request.getRequestId() == null
+                ? "req-unknown"
+                : request.getRequestId();
+
+        Long orderId = request.getOrderId();
+
+        System.out.println(
+                "timestamp=" + Instant.now()
+                        + " service=payment-service"
+                        + " event_type=payment_processing"
+                        + " request_id=" + requestId
+                        + " order_id=" + orderId
+                        + " status_code=200"
+                        + " message=Resolving merchant"
+        );
+
+        Merchant merchant;
+
+        if (orderId != null && orderId == 5001L) {
+
+            // INTENTIONAL FAILURE:
+            // Keep merchant null so CODEGUARDIAN has a deterministic
+            // NULL_OBJECT_ACCESS target.
+
+            System.out.println(
+                    "timestamp=" + Instant.now()
+                            + " service=payment-service"
+                            + " event_type=error"
+                            + " request_id=" + requestId
+                            + " status_code=500"
+                            + " error_code=NULL_OBJECT_ACCESS"
+                            + " message=Merchant lookup returned null before validation"
+            );
+
+            merchant = null;
+
+        } else if (orderId != null && orderId == 5002L) {
+
+            merchant = new Merchant("M5002", true);
+
+        } else if (orderId != null && orderId == 5003L) {
+
+            System.out.println(
+                    "timestamp=" + Instant.now()
+                            + " service=payment-service"
+                            + " event_type=error"
+                            + " request_id=" + requestId
+                            + " status_code=500"
+                            + " error_code=DATABASE_TIMEOUT"
+                            + " message=Database query timed out"
+            );
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
+
+            throw new RuntimeException("Query execution timeout");
+
+        } else if (orderId != null && orderId == 5004L) {
+
+            throw new RuntimeException("Connection refused");
+
+        } else if (orderId != null && orderId == 5006L) {
+
+            throw new IllegalStateException("Invalid payment state");
+
         } else {
-            merchant = merchantRepository.findByMerchantCode(request.getMerchantCode());
+
+            merchant = merchantRepository.findByMerchantCode(
+                    request.getMerchantCode()
+            );
         }
 
-        // INTENTIONAL DEFECT: Assuming merchant is always found and not null.
+        // INTENTIONAL DEFECT FOR CODEGUARDIAN DEMO.
+        // Do not fix this on main.
         if (!merchant.isActive()) {
             throw new RuntimeException("Merchant is not active");
         }
 
-        // Process payment
-        Payment payment = new Payment(request.getMerchantCode(), request.getAmount(), "SUCCESS");
+        Payment payment = new Payment(
+                request.getMerchantCode(),
+                request.getAmount(),
+                "SUCCESS"
+        );
+
         return paymentRepository.save(payment);
     }
 }
