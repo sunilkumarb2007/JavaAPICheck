@@ -1,11 +1,14 @@
 // CodeGuardian Failure Lab — Frontend Commerce Application
 // Dynamic configuration & REST API client
 
+// TODO: Replace with actual deployed Gateway URL (e.g., https://javaapicheck-gateway.onrender.com)
+const API_BASE_URL = 'https://javaapicheck-gateway.onrender.com';
+
 const CONFIG_KEY_GATEWAY = 'cg_gateway_url';
 const CONFIG_KEY_CODEGUARDIAN = 'cg_app_url';
 
 // Default URLs
-let gatewayUrl = localStorage.getItem(CONFIG_KEY_GATEWAY) || 'http://localhost:8080';
+let gatewayUrl = localStorage.getItem(CONFIG_KEY_GATEWAY) || API_BASE_URL;
 let codeGuardianUrl = localStorage.getItem(CONFIG_KEY_CODEGUARDIAN) || 'http://localhost:5173';
 
 // URL params override
@@ -153,7 +156,7 @@ async function loadProducts(searchQuery = '') {
         productsGrid.innerHTML = `
             <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 2rem;">
                 <p style="color: var(--accent-danger); margin-bottom: 0.5rem;">Failed to load products from Gateway (${gatewayUrl})</p>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Ensure gateway (:8080) and order-service (:8081) are running.</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Ensure gateway and order-service are running.</p>
                 <button class="btn btn-secondary btn-sm" style="margin-top: 1rem;" onclick="loadProducts()">Retry</button>
             </div>
         `;
@@ -443,7 +446,7 @@ function closeConfigModal() {
 }
 
 function saveConfig() {
-    gatewayUrl = gatewayUrlInput.value.trim() || 'http://localhost:8080';
+    gatewayUrl = gatewayUrlInput.value.trim() || API_BASE_URL;
     codeGuardianUrl = codeguardianUrlInput.value.trim() || 'http://localhost:5173';
     localStorage.setItem(CONFIG_KEY_GATEWAY, gatewayUrl);
     localStorage.setItem(CONFIG_KEY_CODEGUARDIAN, codeGuardianUrl);
@@ -455,7 +458,7 @@ function saveConfig() {
 }
 
 function resetConfig() {
-    gatewayUrl = 'http://localhost:8080';
+    gatewayUrl = API_BASE_URL;
     codeGuardianUrl = 'http://localhost:5173';
     localStorage.removeItem(CONFIG_KEY_GATEWAY);
     localStorage.removeItem(CONFIG_KEY_CODEGUARDIAN);
