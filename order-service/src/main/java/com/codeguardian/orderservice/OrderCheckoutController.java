@@ -43,11 +43,6 @@ public class OrderCheckoutController {
         this.paymentServiceUrl = paymentServiceUrl;
     }
 
-    @GetMapping("/health")
-    public Map<String, String> health() {
-        return Map.of("status", "UP", "service", "order-service");
-    }
-
     @GetMapping("/orders/products")
     public List<Product> getProducts() {
         return productRepository.findAll();

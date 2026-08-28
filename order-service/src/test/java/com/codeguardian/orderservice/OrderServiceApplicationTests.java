@@ -40,8 +40,9 @@ class OrderServiceApplicationTests {
                 logWriter,
                 "http://localhost:8082"
         );
+        HealthController healthController = new HealthController();
 
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller, healthController).build();
     }
 
     @Test
