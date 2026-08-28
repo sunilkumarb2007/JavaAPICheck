@@ -28,7 +28,7 @@ public class PaymentController {
         this.logWriter = logWriter;
     }
 
-    @GetMapping("/health")
+    @GetMapping({"/", "/health"})
     public Map<String, String> health() {
         return Map.of("status", "UP", "service", "payment-service");
     }
