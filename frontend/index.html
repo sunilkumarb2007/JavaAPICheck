@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeGuardian Failure Lab — SecOps Microservice Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Glow Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Top Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">GuardianStore</span>
+                    <span class="brand-badge">Failure Lab</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#hero" class="nav-link active" data-nav="home">Home</a>
+                <a href="#products-section" class="nav-link" data-nav="products">Products</a>
+                <a href="#orders-section" class="nav-link" data-nav="orders">Orders</a>
+                <a href="#scenarios-section" class="nav-link" data-nav="scenarios">Failure Lab</a>
+            </nav>
+
+            <div class="nav-actions">
+                <!-- Backend Endpoint Switcher -->
+                <button id="config-btn" class="icon-btn" title="Backend API Configuration">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+
+                <!-- Health Status Badge -->
+                <div class="health-pill" id="health-pill" title="Aggregate Gateway & Microservice Health">
+                    <span class="health-dot" id="health-dot"></span>
+                    <span class="health-text" id="health-text">Connecting...</span>
+                </div>
+
+                <!-- Cart Button -->
+                <button id="cart-toggle-btn" class="cart-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <span>Cart</span>
+                    <span id="cart-count-badge" class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <div class="hero-tag">
+                    <span class="tag-pulse"></span>
+                    LIVE CODEGUARDIAN FAILURE LAB &amp; TARGET
+                </div>
+                <h1 class="hero-title">
+                    Enterprise SecOps Tools with <span class="gradient-text">Autonomous AI Repair</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Experience deterministic failure injection and autonomous reconstruction. Order through real Spring Boot microservices backed by database persistence.
+                </p>
+                
+                <div class="hero-actions">
+                    <a href="#products-section" class="btn btn-primary">
+                        Browse Catalog
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#scenarios-section" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Test Scenarios (5001 / 5002)
+                    </a>
+                </div>
+            </div>
+
+            <!-- Architecture Diagram Micro-Card -->
+            <div class="hero-card glass-panel">
+                <div class="card-header">
+                    <span class="card-label">MICROSERVICE ARCHITECTURE</span>
+                    <span class="live-indicator"><span class="dot green"></span> Live Telemetry</span>
+                </div>
+                <div class="arch-flow">
+                    <div class="arch-node">
+                        <span class="node-icon">🌐</span>
+                        <div class="node-meta">
+                            <span class="node-name">Frontend</span>
+                            <span class="node-sub">GitHub Pages</span>
+                        </div>
+                    </div>
+                    <div class="arch-arrow">➔</div>
+                    <div class="arch-node">
+                        <span class="node-icon">🚪</span>
+                        <div class="node-meta">
+                            <span class="node-name">Gateway</span>
+                            <span class="node-sub">:8080 (CORS + CorrID)</span>
+                        </div>
+                    </div>
+                    <div class="arch-arrow">➔</div>
+                    <div class="arch-node">
+                        <span class="node-icon">📦</span>
+                        <div class="node-meta">
+                            <span class="node-name">Order Service</span>
+                            <span class="node-sub">:8081 (JPA)</span>
+                        </div>
+                    </div>
+                    <div class="arch-arrow">➔</div>
+                    <div class="arch-node" id="payment-node">
+                        <span class="node-icon">💳</span>
+                        <div class="node-meta">
+                            <span class="node-name">Payment Service</span>
+                            <span class="node-sub">:8082 (Intentional Defect)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-footer">
+                    <span class="corr-badge" id="live-corr-id">Correlation: X-Request-ID active</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Demo Scenarios Launcher -->
+        <section id="scenarios-section" class="section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Failure Lab Scenarios</h2>
+                    <p class="section-desc">Trigger deterministic execution flows directly against the live backend.</p>
+                </div>
+            </div>
+
+            <div class="scenarios-grid">
+                <!-- Scenario 5001 (Deterministic Failure) -->
+                <div class="scenario-card glass-panel border-danger">
+                    <div class="scenario-badge badge-danger">INTENTIONAL DEFECT</div>
+                    <h3 class="scenario-title">ORDER 5001 — Unseeded Merchant</h3>
+                    <p class="scenario-desc">
+                        Requests merchant lookup for <code>MCH-UNKNOWN</code>. <code>PaymentService.java</code> uncheckedly dereferences the null entity, triggering <strong>HTTP 500</strong> with <code>NULL_OBJECT_ACCESS</code>.
+                    </p>
+                    <div class="scenario-meta">
+                        <span>Expected: <strong>HTTP 500</strong></span>
+                        <span>Post-Fix: <strong>Controlled Error</strong></span>
+                    </div>
+                    <button class="btn btn-danger btn-block" onclick="runScenario('5001')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Execute Order 5001 (Failure Target)
+                    </button>
+                </div>
+
+                <!-- Scenario 5002 (Healthy Success) -->
+                <div class="scenario-card glass-panel border-success">
+                    <div class="scenario-badge badge-success">HEALTHY BASELINE</div>
+                    <h3 class="scenario-title">ORDER 5002 — Verified Merchant</h3>
+                    <p class="scenario-desc">
+                        Requests payment through <code>MCH-5002</code> (CodeGuardian Verified). Active merchant record is resolved from JPA database and processed with <strong>HTTP 200</strong>.
+                    </p>
+                    <div class="scenario-meta">
+                        <span>Expected: <strong>HTTP 200</strong></span>
+                        <span>Status: <strong>Confirmed</strong></span>
+                    </div>
+                    <button class="btn btn-success btn-block" onclick="runScenario('5002')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        Execute Order 5002 (Healthy Demo)
+                    </button>
+                </div>
+
+                <!-- Scenario 5003 (Healthy Alternative) -->
+                <div class="scenario-card glass-panel">
+                    <div class="scenario-badge badge-info">ALTERNATIVE BASELINE</div>
+                    <h3 class="scenario-title">ORDER 5003 — Global SecOps</h3>
+                    <p class="scenario-desc">
+                        Requests payment through <code>MCH-5003</code> (Global SecOps). Validates multi-merchant JPA persistence and transaction token generation.
+                    </p>
+                    <div class="scenario-meta">
+                        <span>Expected: <strong>HTTP 200</strong></span>
+                        <span>Amount: <strong>$299.00</strong></span>
+                    </div>
+                    <button class="btn btn-secondary btn-block" onclick="runScenario('5003')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        Execute Order 5003 (Alternative)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Catalog Section -->
+        <section id="products-section" class="section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">SecOps Product Catalog</h2>
+                    <p class="section-desc">Loaded live from the Order Service JPA Database via Gateway.</p>
+                </div>
+
+                <!-- Real-time Search Box -->
+                <div class="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="product-search-input" placeholder="Search security tools...">
+                    <button id="clear-search-btn" class="search-clear hidden">&times;</button>
+                </div>
+            </div>
+
+            <!-- Products Grid Container -->
+            <div id="products-grid" class="products-grid">
+                <div class="loading-spinner">Loading product catalog from backend...</div>
+            </div>
+        </section>
+
+        <!-- Orders History Section -->
+        <section id="orders-section" class="section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Order History &amp; DB State</h2>
+                    <p class="section-desc">Live persistence records from Spring Boot JPA Order Repository.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="loadOrders()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/></svg>
+                    Refresh Orders
+                </button>
+            </div>
+
+            <div class="orders-table-wrapper glass-panel">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>User ID</th>
+                            <th>Merchant Code</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-tbody">
+                        <tr><td colspan="6" class="text-center">Loading orders from backend...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Drawer Modal -->
+    <div id="cart-drawer" class="drawer-overlay hidden">
+        <div class="drawer-panel glass-panel">
+            <div class="drawer-header">
+                <h3>Shopping Cart</h3>
+                <button id="cart-close-btn" class="icon-btn">&times;</button>
+            </div>
+
+            <div id="cart-items-container" class="cart-items">
+                <div class="empty-cart">Your cart is empty. Add products from the catalog above!</div>
+            </div>
+
+            <div class="drawer-footer">
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="cart-total">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button id="checkout-normal-btn" class="btn btn-success btn-block" onclick="checkoutCart('MCH-5002')">
+                        Proceed to Checkout (Verified Merchant)
+                    </button>
+                    <button id="checkout-bug-btn" class="btn btn-danger btn-block" onclick="checkoutCart('MCH-UNKNOWN')">
+                        Checkout with Unknown Merchant (Trigger Bug)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backend Configuration Modal -->
+    <div id="config-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3>Backend API Configuration</h3>
+                <button id="config-close-btn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Configure the public Gateway URL for static GitHub Pages deployment.</p>
+                <div class="form-group">
+                    <label for="gateway-url-input">Gateway Base URL</label>
+                    <input type="text" id="gateway-url-input" class="form-input" value="http://localhost:8080" placeholder="http://localhost:8080">
+                </div>
+                <div class="form-group">
+                    <label for="codeguardian-url-input">CodeGuardian IDE URL</label>
+                    <input type="text" id="codeguardian-url-input" class="form-input" value="http://localhost:5173" placeholder="http://localhost:5173">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="resetConfig()">Reset Default</button>
+                <button class="btn btn-primary" onclick="saveConfig()">Save &amp; Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Failure Diagnosis Modal -->
+    <div id="failure-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel failure-modal-card">
+            <div class="failure-header">
+                <div class="failure-icon-wrap">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                </div>
+                <div>
+                    <h2 class="failure-title">PAYMENT FAILED</h2>
+                    <p class="failure-subtitle">We couldn't complete your order.</p>
+                </div>
+            </div>
+
+            <div class="failure-status-bar">
+                <div class="status-chip http-chip" id="failure-http-status">HTTP 500</div>
+                <div class="status-chip error-chip" id="failure-error-code">NULL_OBJECT_ACCESS</div>
+                <div class="status-chip req-chip" id="failure-req-id">Request ID: req-demo</div>
+            </div>
+
+            <div class="failure-message-box" id="failure-message">
+                Payment processing failed because merchant data was unavailable
+            </div>
+
+            <!-- Expandable Technical Details Accordion -->
+            <div class="accordion">
+                <button class="accordion-toggle" id="tech-details-toggle" onclick="toggleTechDetails()">
+                    <span>View technical details</span>
+                    <svg id="tech-accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="accordion-content hidden" id="tech-details-content">
+                    <div class="tech-grid">
+                        <div class="tech-item">
+                            <span class="tech-label">Timestamp:</span>
+                            <span class="tech-val" id="tech-timestamp">-</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Request ID:</span>
+                            <span class="tech-val" id="tech-request-id">-</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Endpoint:</span>
+                            <span class="tech-val" id="tech-endpoint">/checkout</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">HTTP Status:</span>
+                            <span class="tech-val" id="tech-status">500</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Error Code:</span>
+                            <span class="tech-val" id="tech-code">NULL_OBJECT_ACCESS</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Service:</span>
+                            <span class="tech-val" id="tech-service">payment-service</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Exception:</span>
+                            <span class="tech-val" id="tech-exception">NullPointerException</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Source File:</span>
+                            <span class="tech-val highlight" id="tech-file">PaymentService.java</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-label">Source Line:</span>
+                            <span class="tech-val highlight" id="tech-line">24</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="failure-actions">
+                <button class="btn btn-secondary" id="copy-details-btn" onclick="copyFailureDetails()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copy failure details
+                </button>
+                <button class="btn btn-primary" id="cg-investigate-btn" onclick="openCodeGuardianInvestigation()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                    Investigate with CodeGuardian
+                </button>
+                <button class="btn btn-ghost" onclick="closeFailureModal()">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel success-modal-card">
+            <div class="success-header">
+                <div class="success-icon-wrap">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div>
+                    <h2 class="success-title">ORDER CONFIRMED</h2>
+                    <p class="success-subtitle" id="success-order-num">Order successfully completed</p>
+                </div>
+            </div>
+            <div class="success-body">
+                <div class="success-meta-row">
+                    <span>Transaction Status</span>
+                    <span class="badge badge-success">HTTP 200 OK / SUCCESS</span>
+                </div>
+                <div class="success-meta-row">
+                    <span>Correlation ID</span>
+                    <code id="success-corr-id">-</code>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-block" onclick="closeSuccessModal()">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>CodeGuardian Official Failure Lab • JavaAPICheck Demonstration Target</p>
+            <p class="text-muted">Connected to Microservice Mesh (Gateway :8080 ➔ Order :8081 ➔ Payment :8082)</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
