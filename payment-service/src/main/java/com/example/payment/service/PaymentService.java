@@ -98,6 +98,9 @@ public class PaymentService {
             merchant = merchantRepository.findByMerchantCode(
                     request.getMerchantCode()
             );
+            if (merchant == null) {
+                throw new IllegalArgumentException("Merchant not found for code: " + request.getMerchantCode());
+            }
         }
 
         // INTENTIONAL DEFECT FOR CODEGUARDIAN DEMO.
