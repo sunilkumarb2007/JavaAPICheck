@@ -28,9 +28,10 @@ class PaymentServiceUnitTest {
 
         CheckoutRequest request = new CheckoutRequest(101L, 5001L, 499.0, "MCH-UNKNOWN");
 
-        // The baseline unpatched code throws NullPointerException
+        // After null-check patch: ISE is thrown instead of NPE
         assertThatThrownBy(() -> paymentService.processPayment(request))
-                .isInstanceOf(NullPointerException.class);
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Merchant not found");
     }
 
     @Test
