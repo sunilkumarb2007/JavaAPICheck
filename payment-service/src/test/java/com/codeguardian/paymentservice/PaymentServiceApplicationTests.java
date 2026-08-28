@@ -50,8 +50,8 @@ class PaymentServiceApplicationTests {
                         .content("""
                                 {"userId":101,"orderId":5001,"amount":499.0,"merchantCode":"MCH-UNKNOWN"}
                                 """))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.errorCode").value("NULL_OBJECT_ACCESS"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value("INACTIVE_MERCHANT"))
                 .andExpect(jsonPath("$.service").value("payment-service"))
                 .andExpect(jsonPath("$.source.file").value("PaymentService.java"));
     }
