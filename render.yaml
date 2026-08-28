@@ -1,0 +1,48 @@
+services:
+  # Static Frontend Site on Render
+  - type: web
+    name: javaapicheck-frontend
+    env: static
+    buildCommand: ""
+    staticPublishPath: ./frontend
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # API Gateway (Spring Cloud / Spring Boot)
+  - type: web
+    name: javaapicheck-gateway
+    env: docker
+    dockerfilePath: ./gateway/Dockerfile
+    envVars:
+      - key: SERVICES_ORDER_BASE_URL
+        fromService:
+          type: web
+          name: javaapicheck-order-service
+          property: host
+      - key: PORT
+        value: 8080
+
+  # Order Service (Spring Boot)
+  - type: web
+    name: javaapicheck-order-service
+    env: docker
+    dockerfilePath: ./order-service/Dockerfile
+    envVars:
+      - key: SERVICES_PAYMENT_BASE_URL
+        fromService:
+          type: web
+          name: javaapicheck-payment-service
+          property: host
+      - key: PORT
+        value: 8081
+
+  # Payment Service (Spring Boot - Target of CodeGuardian Autonomous Repair)
+  - type: web
+    name: javaapicheck-payment-service
+    env: docker
+    dockerfilePath: ./payment-service/Dockerfile
+    envVars:
+      - key: PORT
+        value: 8082
