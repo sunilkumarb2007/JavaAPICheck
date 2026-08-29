@@ -30,6 +30,9 @@ public class PaymentService {
         if (merchant == null) {
             throw new IllegalStateException("Merchant not found for code: " + request.merchantCode());
         }
+        if (merchant == null) {
+            throw new IllegalStateException("Merchant not found for code: " + request.merchantCode());
+        }
         if (!merchant.isActive()) {
             throw new IllegalStateException("Merchant is not active");
         }
