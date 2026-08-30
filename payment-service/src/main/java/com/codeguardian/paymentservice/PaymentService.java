@@ -18,9 +18,8 @@ public class PaymentService {
         // Find merchant by code
         Merchant merchant = merchantRepository.findByMerchantCode(request.merchantCode());
 
-        // INTENTIONAL DEFECT: Assuming merchant is always found and non-null.
-        // If findByMerchantCode returns null (e.g. for ORDER 5001 / unknown merchant),
-        // dereferencing merchant.isActive() throws a NullPointerException.
+        // Defensive null check: if merchant is not found, throw a clear error
+        // instead of allowing a NullPointerException at merchant.isActive()
         if (merchant == null) {
             throw new IllegalStateException("Merchant not found");
         }
