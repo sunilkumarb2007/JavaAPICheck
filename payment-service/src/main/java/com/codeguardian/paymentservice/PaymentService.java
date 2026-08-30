@@ -21,6 +21,9 @@ public class PaymentService {
         // Defensive null check: if merchant is not found, throw a clear error
         // instead of allowing a NullPointerException at merchant.isActive()
         if (merchant == null) {
+        if (merchant == null) {
+            throw new IllegalStateException("Merchant not found for code: " + request.merchantCode());
+        }
             throw new IllegalStateException("Merchant not found");
         }
         if (!merchant.isActive()) {
