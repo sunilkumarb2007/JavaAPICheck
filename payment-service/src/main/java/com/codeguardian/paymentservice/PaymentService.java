@@ -18,11 +18,7 @@ public class PaymentService {
         // Find merchant by code
         Merchant merchant = merchantRepository.findByMerchantCode(request.merchantCode());
 
-        // Defensive null check: if merchant is not found, throw a clear error
-        // instead of allowing a NullPointerException at merchant.isActive()
-        if (merchant == null) {
-            throw new IllegalStateException("Merchant not found");
-        }
+        // BUG: Missing null check! If merchant is null, dereferencing merchant.isActive() throws NullPointerException
         if (!merchant.isActive()) {
             throw new IllegalStateException("Merchant is not active");
         }
